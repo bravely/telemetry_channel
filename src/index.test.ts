@@ -193,7 +193,10 @@ const assertAllTelemetryFields = <
 	R = unknown,
 >(
 	ctx: T | undefined,
-): MarkRequired<T, keyof Omit<TracedFunctionDetails<R>, 'result'>> => {
+): MarkRequired<
+	T,
+	keyof Omit<TracedFunctionDetails<R>, 'result' | 'error'>
+> => {
 	assert(ctx);
 	assert(ctx.startMonotonicTime);
 	assert(ctx.endMonotonicTime);

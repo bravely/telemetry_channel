@@ -8,9 +8,14 @@ A helper library standardizing `diagnostic_channel` channels for emitting teleme
 This package requires Node.js `19.9.0` or later, or `^18.19.0`, as that's
 when [TracingChannel](https://nodejs.org/api/diagnostics_channel.html#class-tracingchannel) was introduced.
 
-**NPM**
 ```bash
 npm install telemetry_channel
+
+pnpm add telemetry_channel
+
+yarn add telemetry_channel
+
+bun add telemetry_channel
 ```
 
 ## Usage
@@ -41,3 +46,19 @@ const newUser = eventChannel.traceSync((attrs: UserAttributes) => {
 }, { referrer: 'google' }, null, request.parsedBody)
 ```
 
+### Traced Function Details
+Under the hood, this is just a wrapper around `diagnostics_channel`'s [`TracingChannel`](https://nodejs.org/docs/latest-v18.x/api/diagnostics_channel.html#class-tracingchannel)
+that provides monotonic timing data to the event context. These are the fields
+and what they correspond to:
+
+- `result`: Provided by `TracingChannel`, the result of the function if it succeeds. Not available in the `start` or `error` events.
+- `error`: Provided by `TracingChannel`, the error that occurred if the function fails. Not available in the `start` event.
+- `startMonotonicTime`: The result of [`process.hrtime.bigint()`](https://nodejs.org/api/process.html#processhrtimebigint) at the start of the function.
+- `endMonotonicTime`: The result of [`process.hrtime.bigint()`](https://nodejs.org/api/process.html#processhrtimebigint) at the end of the function.
+- `duration`: The difference between `endMonotonicTime` and `startMonotonicTime`.
+
+## Todo
+- [x] Add `traceSync`
+- [ ] Add `tracePromise`
+- [ ] Add `traceCallback`
+- [ ] Publish to npm

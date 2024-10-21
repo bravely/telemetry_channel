@@ -17,6 +17,7 @@ export type TracedFunctionDetails<R> = {
 	endMonotonicTime?: bigint | undefined;
 	duration?: bigint | undefined;
 	result?: R | undefined;
+	error?: R | undefined;
 };
 export type TracingChannelEvent<
 	C extends Record<string, any>,
